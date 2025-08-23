@@ -1,0 +1,15 @@
+{
+  "name": "ai-tutor",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "node-fetch": "^3.3.2",
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}
