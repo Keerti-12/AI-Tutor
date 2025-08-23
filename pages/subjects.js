@@ -160,11 +160,85 @@ export default function Subjects() {
                 <h2>{overviewData[selected].icon} {overviewData[selected].title}</h2>
                 <h4>Course Structure:</h4>
                 <ul>
-                  {overviewData[selected].structure.map((item, idx) => <li key={idx}>{item}</li>)}
+                  {overviewData[selected].structure.map((item, idx) => (
+                    <li key={idx} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px'}}>
+                      <span>{item}</span>
+                      <button 
+                        onClick={() => fetchNotes(item)}
+                        disabled={loadingNotes}
+                        style={{
+                          background: 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '50%',
+                          width: '32px',
+                          height: '32px',
+                          color: overviewData[selected].theme.includes('color:') ? overviewData[selected].theme.split('color:')[1].split(';')[0].trim() : 'white',
+                          fontSize: '1rem',
+                          cursor: loadingNotes ? 'not-allowed' : 'pointer',
+                          opacity: loadingNotes ? 0.5 : 1,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.2s ease',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!loadingNotes) {
+                            e.target.style.transform = 'scale(1.1)';
+                            e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = 'scale(1)';
+                          e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                        }}
+                        title="Generate notes for this topic"
+                      >
+                        <i className="fas fa-file-alt"></i>
+                      </button>
+                    </li>
+                  ))}
                 </ul>
                 <h4>Syllabus:</h4>
                 <ul>
-                  {overviewData[selected].syllabus.map((item, idx) => <li key={idx}>{item}</li>)}
+                  {overviewData[selected].syllabus.map((item, idx) => (
+                    <li key={idx} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px'}}>
+                      <span>{item}</span>
+                      <button 
+                        onClick={() => fetchNotes(item)}
+                        disabled={loadingNotes}
+                        style={{
+                          background: 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '50%',
+                          width: '32px',
+                          height: '32px',
+                          color: overviewData[selected].theme.includes('color:') ? overviewData[selected].theme.split('color:')[1].split(';')[0].trim() : 'white',
+                          fontSize: '1rem',
+                          cursor: loadingNotes ? 'not-allowed' : 'pointer',
+                          opacity: loadingNotes ? 0.5 : 1,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.2s ease',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!loadingNotes) {
+                            e.target.style.transform = 'scale(1.1)';
+                            e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = 'scale(1)';
+                          e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                        }}
+                        title="Generate notes for this topic"
+                      >
+                        <i className="fas fa-file-alt"></i>
+                      </button>
+                    </li>
+                  ))}
                 </ul>
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   <button
