@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Progress() {
   return (
@@ -12,11 +13,11 @@ export default function Progress() {
           <p>Your personalized learning companion</p>
         </div>
         <div className="nav-tabs">
-          <a className="nav-tab" href="/"> <i className="fas fa-home"></i> Dashboard</a>
-          <a className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</a>
-          <a className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</a>
-          <a className="nav-tab active" href="/progress"><i className="fas fa-chart-line"></i> Progress</a>
-          <a className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</a>
+          <Link className="nav-tab" href="/"> <i className="fas fa-home"></i> Dashboard</Link>
+          <Link className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</Link>
+          <Link className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</Link>
+          <Link className="nav-tab active" href="/progress"><i className="fas fa-chart-line"></i> Progress</Link>
+          <Link className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</Link>
         </div>
         <div id="progress" className="tab-content active">
           <h2>Your Learning Progress</h2>

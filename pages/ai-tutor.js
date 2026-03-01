@@ -1,5 +1,8 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRef, useState } from 'react';
+
+const MAX_INPUT_LENGTH = 500;
 
 export default function AiTutor() {
   const [messages, setMessages] = useState([
@@ -7,20 +10,10 @@ export default function AiTutor() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const chatContainerRef = useRef(null);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-    setMessages(prev => [...prev, { text: input, sender: 'user' }]);
-    setInput("");
-    setLoading(true);
-    try {
-      const aiResponse = await getCohereResponse(input);
-      setMessages(prev => [...prev, { text: aiResponse, sender: 'ai' }]);
-    } catch {
-      setMessages(prev => [...prev, { text: 'Sorry, there was an error connecting to the AI service.', sender: 'ai' }]);
-    }
-    setLoading(false);
+  const scrollToBottom = () => {
     setTimeout(() => {
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -28,32 +21,45 @@ export default function AiTutor() {
     }, 100);
   };
 
-  async function getCohereResponse(userMessage) {
-    const endpoint = '/api/cohere';
-    const data = {
-      model: 'command',
-      prompt: userMessage,
-      max_tokens: 100,
-      temperature: 0.7
-    };
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-      if (!response.ok) {
-        throw new Error('API error');
-      }
-      const result = await response.json();
-      if (result.text) return result.text.trim();
-      if (result.generations && result.generations[0] && result.generations[0].text) return result.generations[0].text.trim();
-      return 'No response from AI.';
-    } catch (error) {
-      return 'Error fetching response.';
+  const sendMessage = async () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    if (trimmed.length > MAX_INPUT_LENGTH) {
+      setError(`Message is too long. Please keep it under ${MAX_INPUT_LENGTH} characters.`);
+      return;
     }
+    setError("");
+    setMessages(prev => [...prev, { text: trimmed, sender: 'user' }]);
+    setInput("");
+    setLoading(true);
+    try {
+      const aiResponse = await getCohereResponse(trimmed);
+      setMessages(prev => [...prev, { text: aiResponse, sender: 'ai' }]);
+    } catch {
+      setMessages(prev => [...prev, { text: 'Sorry, there was an error connecting to the AI service. Please try again.', sender: 'ai' }]);
+    }
+    setLoading(false);
+    scrollToBottom();
+  };
+
+  async function getCohereResponse(userMessage) {
+    const response = await fetch('/api/cohere', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'command', prompt: userMessage, max_tokens: 100, temperature: 0.7 }),
+    });
+    if (!response.ok) {
+      let message = 'AI service error.';
+      try {
+        const err = await response.json();
+        if (err.error) message = err.error;
+      } catch { /* ignore parse error */ }
+      throw new Error(message);
+    }
+    const result = await response.json();
+    if (result.text) return result.text.trim();
+    if (result.generations?.[0]?.text) return result.generations[0].text.trim();
+    return 'No response from AI.';
   }
 
   return (
@@ -206,11 +212,11 @@ export default function AiTutor() {
           <p>Your personalized learning companion</p>
         </div>
         <div className="nav-tabs">
-          <a className="nav-tab" href="/"><i className="fas fa-home"></i> Dashboard</a>
-          <a className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</a>
-          <a className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</a>
-          <a className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</a>
-          <a className="nav-tab active" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</a>
+          <Link className="nav-tab" href="/"><i className="fas fa-home"></i> Dashboard</Link>
+          <Link className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</Link>
+          <Link className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</Link>
+          <Link className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</Link>
+          <Link className="nav-tab active" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</Link>
         </div>
         <div id="ai-tutor" className="tab-content active">
           <div className="ai-tutor">
@@ -228,6 +234,9 @@ export default function AiTutor() {
                 </div>
               )}
             </div>
+            {error && (
+              <p role="alert" style={{ color: '#c62828', fontSize: '0.95rem', marginBottom: '0.5rem' }}>{error}</p>
+            )}
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
                 type="text"
@@ -235,11 +244,16 @@ export default function AiTutor() {
                 id="chatInput"
                 placeholder="Ask a question..."
                 value={input}
-                onChange={e => setInput(e.target.value)}
+                maxLength={MAX_INPUT_LENGTH}
+                onChange={e => { setInput(e.target.value); if (error) setError(""); }}
                 onKeyDown={e => { if (e.key === 'Enter') sendMessage(); }}
                 disabled={loading}
+                aria-label="Chat input"
               />
-              <button className="send-btn" onClick={sendMessage} disabled={loading}>Send</button>
+              <button className="send-btn" onClick={sendMessage} disabled={loading || !input.trim()}>Send</button>
+            </div>
+            <div style={{ textAlign: 'right', fontSize: '0.8rem', color: input.length > MAX_INPUT_LENGTH * 0.9 ? '#c62828' : '#999', marginTop: '0.3rem' }}>
+              {input.length}/{MAX_INPUT_LENGTH}
             </div>
           </div>
         </div>

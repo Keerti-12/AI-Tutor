@@ -4,12 +4,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "latest",
     "node-fetch": "^3.3.2",
     "react": "latest",
     "react-dom": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.3",
+    "eslint-config-next": "^16.1.6"
   }
 }

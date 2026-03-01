@@ -1,5 +1,25 @@
 node_modules/
 .next/
+out/
+
+# Environment variable files – never commit secrets
 .env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+
+# Credential / key files
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+*-credentials.json
+secrets/
+
 *.log
 .DS_Store

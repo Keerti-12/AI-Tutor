@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Lesson() {
   return (
@@ -12,15 +13,15 @@ export default function Lesson() {
           <p>Your personalized learning companion</p>
         </div>
         <div className="nav-tabs">
-          <a className="nav-tab" href="/"> <i className="fas fa-home"></i> Dashboard</a>
-          <a className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</a>
-          <a className="nav-tab active" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</a>
-          <a className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</a>
-          <a className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</a>
+          <Link className="nav-tab" href="/"> <i className="fas fa-home"></i> Dashboard</Link>
+          <Link className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</Link>
+          <Link className="nav-tab active" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</Link>
+          <Link className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</Link>
+          <Link className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</Link>
         </div>
         <div id="lesson" className="tab-content active">
             <div id="lessonContent" style={{padding: '2rem', background: '#f8f9fa', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)'}}>
-              <h2>Today's Lesson: Introduction to Artificial Intelligence</h2>
+              <h2>Today&apos;s Lesson: Introduction to Artificial Intelligence</h2>
               <p>Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn. AI is used in various fields such as healthcare, finance, education, and more.</p>
               <ul>
                 <li><b>Definition:</b> AI refers to systems that can perform tasks that typically require human intelligence.</li>
