@@ -1,6 +1,6 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useState } from 'react';
-// import '../public/style.css'; // Removed global CSS import
 
 const subjects = [
   {
@@ -73,12 +73,18 @@ export default function Subjects() {
           temperature: 0.7,
         }),
       });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        setNotes(err.error || 'Failed to fetch notes. Please try again.');
+        setLoadingNotes(false);
+        return;
+      }
       const result = await response.json();
       if (result.text) setNotes(result.text.trim());
-      else if (result.generations && result.generations[0] && result.generations[0].text) setNotes(result.generations[0].text.trim());
+      else if (result.generations?.[0]?.text) setNotes(result.generations[0].text.trim());
       else setNotes('No notes found.');
     } catch {
-      setNotes('Error fetching notes.');
+      setNotes('Error fetching notes. Please check your connection and try again.');
     }
     setLoadingNotes(false);
   };
@@ -86,6 +92,8 @@ export default function Subjects() {
   const generateQuiz = async (subject) => {
     setLoadingQuiz(true);
     setQuiz('');
+    setQuizAnswer('');
+    setQuizFeedback('');
     try {
       const response = await fetch('/api/cohere', {
         method: 'POST',
@@ -97,12 +105,18 @@ export default function Subjects() {
           temperature: 0.7,
         }),
       });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        setQuiz(err.error || 'Failed to generate quiz. Please try again.');
+        setLoadingQuiz(false);
+        return;
+      }
       const result = await response.json();
       if (result.text) setQuiz(result.text.trim());
-      else if (result.generations && result.generations[0] && result.generations[0].text) setQuiz(result.generations[0].text.trim());
+      else if (result.generations?.[0]?.text) setQuiz(result.generations[0].text.trim());
       else setQuiz('No quiz found.');
     } catch {
-      setQuiz('Error fetching quiz.');
+      setQuiz('Error fetching quiz. Please check your connection and try again.');
     }
     setLoadingQuiz(false);
   };
@@ -133,11 +147,11 @@ export default function Subjects() {
           <p>Your personalized learning companion</p>
         </div>
         <div className="nav-tabs">
-          <a className="nav-tab" href="/"> <i className="fas fa-home"></i> Dashboard</a>
-          <a className="nav-tab active" href="/subjects"><i className="fas fa-book"></i> Subjects</a>
-          <a className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</a>
-          <a className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</a>
-          <a className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</a>
+          <Link className="nav-tab" href="/"> <i className="fas fa-home"></i> Dashboard</Link>
+          <Link className="nav-tab active" href="/subjects"><i className="fas fa-book"></i> Subjects</Link>
+          <Link className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</Link>
+          <Link className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</Link>
+          <Link className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</Link>
         </div>
         <div id="subjects" className="tab-content active">
           <h2>Choose Your Subject</h2>

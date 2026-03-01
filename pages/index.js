@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Home() {
@@ -21,11 +22,11 @@ export default function Home() {
           <p>Your personalized learning companion</p>
         </div>
         <div className="nav-tabs">
-          <a className="nav-tab active" href="/"> <i className="fas fa-home"></i> Dashboard</a>
-          <a className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</a>
-          <a className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</a>
-          <a className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</a>
-          <a className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</a>
+          <Link className="nav-tab active" href="/"> <i className="fas fa-home"></i> Dashboard</Link>
+          <Link className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</Link>
+          <Link className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</Link>
+          <Link className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</Link>
+          <Link className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</Link>
         </div>
         <div id="dashboard" className="tab-content active">
           <h2>Welcome back! Ready to continue learning?</h2>
@@ -108,10 +109,10 @@ export default function Home() {
             }}>
               <h3 style={{fontSize: '1.2rem', marginBottom: '1.5rem', fontWeight: 600}}>Quick Links</h3>
               <ul style={{listStyle: 'none', padding: 0, margin: 0, lineHeight: '2'}}>
-                <li><a href="/subjects" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Go to Subjects</a></li>
-                <li><a href="/lesson" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Continue Lesson</a></li>
-                <li><a href="/progress" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>View Progress</a></li>
-                <li><a href="/ai-tutor" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Ask AI Tutor</a></li>
+                <li><Link href="/subjects" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Go to Subjects</Link></li>
+                <li><Link href="/lesson" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Continue Lesson</Link></li>
+                <li><Link href="/progress" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>View Progress</Link></li>
+                <li><Link href="/ai-tutor" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Ask AI Tutor</Link></li>
               </ul>
             </div>
             <div style={{
@@ -134,7 +135,7 @@ export default function Home() {
                 borderRadius: 12,
                 borderLeft: '4px solid rgba(255,255,255,0.4)'
               }}>
-                "Success is the sum of small efforts, repeated day in and day out."
+                &ldquo;Success is the sum of small efforts, repeated day in and day out.&rdquo;
                 <footer style={{fontSize: '0.9rem', marginTop: '1rem', opacity: 0.8}}>— Robert Collier</footer>
               </blockquote>
             </div>
