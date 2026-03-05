@@ -1,171 +1,221 @@
-import Head from 'next/head';
 import { useState } from 'react';
+import Link from 'next/link';
+import { modernStyles } from '../components/ModernLayout';
 
 export default function Home() {
-  // Example state, you can expand this to match your app logic
-  const [stats, setStats] = useState({
-    totalLessons: 0,
-    averageScore: '0%',
-    currentStreak: 0,
-    totalTime: '0h',
+  const [userData, setUserData] = useState({
+    name: 'Alex Chen',
+    totalProgress: 68,
+    currentStreak: 12,
+    weeklyGoal: 75,
+    weeklyProgress: 58
   });
+
+  const [subjects, setSubjects] = useState([
+    { id: 1, name: 'Artificial Intelligence', progress: 75, lessons: 12, totalLessons: 16, icon: '🤖', color: '#667eea', lastStudied: '2h ago', status: 'In Progress' },
+    { id: 2, name: 'Machine Learning', progress: 60, lessons: 9, totalLessons: 15, icon: '🧠', color: '#ed8936', lastStudied: '1d ago', status: 'In Progress' },
+    { id: 3, name: 'Data Science', progress: 85, lessons: 17, totalLessons: 20, icon: '📊', color: '#48bb78', lastStudied: '3h ago', status: 'In Progress' },
+    { id: 4, name: 'Python Programming', progress: 100, lessons: 25, totalLessons: 25, icon: '🐍', color: '#4299e1', lastStudied: '1w ago', status: 'Completed' }
+  ]);
+
+  const [recentActivity, setRecentActivity] = useState([
+    { id: 1, type: 'lesson', title: 'Neural Networks Basics', subject: 'AI', time: '2 hours ago', score: 95 },
+    { id: 2, type: 'quiz', title: 'ML Algorithms Quiz', subject: 'ML', time: '1 day ago', score: 88 },
+    { id: 3, type: 'achievement', title: 'Week Streak Achieved!', subject: 'General', time: '2 days ago', score: null }
+  ]);
+
+  const stats = [
+    { title: 'Total Progress', value: `${userData.totalProgress}%`, change: '+12% this month', icon: '📈', color: '#667eea', positive: true },
+    { title: 'Active Subjects', value: subjects.filter(s => s.status === 'In Progress').length, change: `${subjects.length} total enrolled`, icon: '📚', color: '#ed8936', positive: false },
+    { title: 'Current Streak', value: `${userData.currentStreak} days`, change: 'Keep it going!', icon: '🔥', color: '#48bb78', positive: true },
+    { title: 'Weekly Goal', value: `${userData.weeklyProgress}/${userData.weeklyGoal}%`, change: `${userData.weeklyGoal - userData.weeklyProgress}% remaining`, icon: '🎯', color: '#4299e1', positive: false }
+  ];
 
   return (
     <>
-      <Head>
-        <title>AI Tutor - Personalized Learning</title>
-      </Head>
-      <div className="container">
-        <div className="header">
-          <h1><i className="fas fa-graduation-cap"></i> AI Tutor</h1>
-          <p>Your personalized learning companion</p>
-        </div>
-        <div className="nav-tabs">
-          <a className="nav-tab active" href="/"> <i className="fas fa-home"></i> Dashboard</a>
-          <a className="nav-tab" href="/subjects"><i className="fas fa-book"></i> Subjects</a>
-          <a className="nav-tab" href="/lesson"><i className="fas fa-chalkboard-teacher"></i> Current Lesson</a>
-          <a className="nav-tab" href="/progress"><i className="fas fa-chart-line"></i> Progress</a>
-          <a className="nav-tab" href="/ai-tutor"><i className="fas fa-robot"></i> AI Tutor</a>
-        </div>
-        <div id="dashboard" className="tab-content active">
-          <h2>Welcome back! Ready to continue learning?</h2>
+      <style jsx global>{modernStyles}</style>
+      <div className="app-container">
+        <aside className="sidebar">
+          <div className="sidebar-header">
+            <div className="logo">🎓 EduPro</div>
+          </div>
+          <nav className="nav-menu">
+            <Link href="/" className="nav-item active">
+              <span className="nav-item-icon">📊</span>
+              Dashboard
+            </Link>
+            <Link href="/subjects" className="nav-item">
+              <span className="nav-item-icon">📚</span>
+              My Subjects
+            </Link>
+            <Link href="/lesson" className="nav-item">
+              <span className="nav-item-icon">📖</span>
+              Current Lesson
+            </Link>
+            <Link href="/progress" className="nav-item">
+              <span className="nav-item-icon">📈</span>
+              Progress & Analytics
+            </Link>
+            <Link href="/ai-tutor" className="nav-item">
+              <span className="nav-item-icon">🤖</span>
+              AI Tutor Chat
+            </Link>
+          </nav>
+        </aside>
+
+        <main className="main-content">
+          <div className="page-header">
+            <h1 className="page-title">Welcome back, {userData.name}! 👋</h1>
+            <p className="page-subtitle">Here's your learning progress today</p>
+          </div>
+
           <div className="stats-grid">
-            <div className="stat-card" style={{
-              background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-              color: 'white',
-              borderRadius: 18,
-              boxShadow: '0 4px 16px #764ba244',
-              padding: '1.2rem',
-              margin: '0.5rem',
-              textAlign: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'transform 0.2s',
-            }}>
-              <div style={{fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.2rem'}}><i className="fas fa-book-open"></i></div>
-              <div className="stat-value" id="totalLessons" style={{fontSize: '2.1rem', fontWeight: 700}}>{stats.totalLessons}</div>
-              <div style={{fontSize: '1.1rem', marginTop: '0.2rem'}}>Lessons Completed</div>
+            {stats.map((stat, index) => (
+              <div key={index} className="stat-card">
+                <div className="stat-card-header">
+                  <span className="stat-card-title">{stat.title}</span>
+                  <div className="stat-card-icon" style={{ background: `${stat.color}15`, color: stat.color }}>
+                    {stat.icon}
+                  </div>
+                </div>
+                <div className="stat-card-value">{stat.value}</div>
+                <div className={`stat-card-change ${stat.positive ? 'positive' : 'neutral'}`}>
+                  {stat.positive && '↗ '}{stat.change}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="content-grid">
+            <div className="card">
+              <div className="card-header">
+                <h2 className="card-title">My Learning Path</h2>
+                <Link href="/subjects" className="btn btn-secondary">View All</Link>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {subjects.map(subject => (
+                  <Link key={subject.id} href="/lesson" style={{ textDecoration: 'none' }}>
+                    <div className="subject-card">
+                      <div className="subject-header">
+                        <div className="subject-title">
+                          <div className="subject-icon" style={{ background: `${subject.color}15`, color: subject.color }}>
+                            {subject.icon}
+                          </div>
+                          <div>
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem', color: '#1a202c' }}>{subject.name}</h3>
+                            <p style={{ fontSize: '0.875rem', color: '#718096' }}>Last studied: {subject.lastStudied}</p>
+                          </div>
+                        </div>
+                        <span className={`badge ${subject.status === 'Completed' ? 'badge-success' : 'badge-info'}`}>
+                          {subject.status}
+                        </span>
+                      </div>
+                      <div style={{ marginBottom: '0.75rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#4a5568' }}>
+                            {subject.lessons}/{subject.totalLessons} lessons completed
+                          </span>
+                          <span style={{ fontSize: '0.875rem', fontWeight: 700, color: subject.color }}>
+                            {subject.progress}%
+                          </span>
+                        </div>
+                        <div className="progress-bar-container">
+                          <div className="progress-bar-fill" style={{ width: `${subject.progress}%`, background: subject.color }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
-            <div className="stat-card" style={{
-              background: 'linear-gradient(135deg, #64b5f6 0%, #90caf9 100%)',
-              color: 'white',
-              borderRadius: 18,
-              boxShadow: '0 4px 16px #64b5f644',
-              padding: '1.2rem',
-              margin: '0.5rem',
-              textAlign: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'transform 0.2s',
-            }}>
-              <div style={{fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.2rem'}}><i className="fas fa-star"></i></div>
-              <div className="stat-value" id="averageScore" style={{fontSize: '2.1rem', fontWeight: 700}}>{stats.averageScore}</div>
-              <div style={{fontSize: '1.1rem', marginTop: '0.2rem'}}>Average Quiz Score</div>
-            </div>
-            <div className="stat-card" style={{
-              background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-              color: '#764ba2',
-              borderRadius: 18,
-              boxShadow: '0 4px 16px #a8edea44',
-              padding: '1.2rem',
-              margin: '0.5rem',
-              textAlign: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'transform 0.2s',
-            }}>
-              <div style={{fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.2rem'}}><i className="fas fa-fire"></i></div>
-              <div className="stat-value" id="currentStreak" style={{fontSize: '2.1rem', fontWeight: 700}}>{stats.currentStreak}</div>
-              <div style={{fontSize: '1.1rem', marginTop: '0.2rem'}}>Day Streak</div>
-            </div>
-            <div className="stat-card" style={{
-              background: 'linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%)',
-              color: 'white',
-              borderRadius: 18,
-              boxShadow: '0 4px 16px #44a08d44',
-              padding: '1.2rem',
-              margin: '0.5rem',
-              textAlign: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'transform 0.2s',
-            }}>
-              <div style={{fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.2rem'}}><i className="fas fa-clock"></i></div>
-              <div className="stat-value" id="totalTime" style={{fontSize: '2.1rem', fontWeight: 700}}>{stats.totalTime}</div>
-              <div style={{fontSize: '1.1rem', marginTop: '0.2rem'}}>Study Time</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div className="card">
+                <div className="card-header">
+                  <h2 className="card-title">Weekly Goal</h2>
+                </div>
+                <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+                  <div style={{ 
+                    width: '150px', 
+                    height: '150px', 
+                    borderRadius: '50%', 
+                    background: `conic-gradient(#667eea ${userData.weeklyProgress * 3.6}deg, #e2e8f0 ${userData.weeklyProgress * 3.6}deg)`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 1.5rem'
+                  }}>
+                    <div style={{ 
+                      width: '120px', 
+                      height: '120px', 
+                      borderRadius: '50%', 
+                      background: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '2rem',
+                      fontWeight: 700,
+                      color: '#667eea'
+                    }}>
+                      {userData.weeklyProgress}%
+                    </div>
+                  </div>
+                  <p style={{ color: '#718096', fontSize: '0.95rem' }}>
+                    {userData.weeklyGoal - userData.weeklyProgress}% left to reach your weekly goal
+                  </p>
+                  <button className="btn btn-primary" style={{ marginTop: '1rem' }}>
+                    Continue Learning
+                  </button>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  <h2 className="card-title">Recent Activity</h2>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {recentActivity.map(activity => (
+                    <div key={activity.id} style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '1rem',
+                      padding: '0.75rem',
+                      background: '#f7fafc',
+                      borderRadius: '10px'
+                    }}>
+                      <div style={{ 
+                        width: '40px', 
+                        height: '40px', 
+                        borderRadius: '10px',
+                        background: activity.type === 'lesson' ? '#667eea15' : activity.type === 'quiz' ? '#ed893615' : '#48bb7815',
+                        color: activity.type === 'lesson' ? '#667eea' : activity.type === 'quiz' ? '#ed8936' : '#48bb78',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.2rem'
+                      }}>
+                        {activity.type === 'lesson' ? '📖' : activity.type === 'quiz' ? '✍️' : '🏆'}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a202c' }}>{activity.title}</div>
+                        <div style={{ fontSize: '0.8rem', color: '#718096' }}>{activity.time}</div>
+                      </div>
+                      {activity.score && (
+                        <div style={{ 
+                          fontWeight: 700, 
+                          fontSize: '1.1rem',
+                          color: activity.score >= 90 ? '#48bb78' : activity.score >= 70 ? '#ed8936' : '#f56565'
+                        }}>
+                          {activity.score}%
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-          <div style={{marginTop: '2.5rem', display: 'flex', gap: '2rem', flexWrap: 'wrap'}}>
-            <div style={{
-              flex: 1, 
-              minWidth: 260, 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-              color: 'white', 
-              borderRadius: 16, 
-              boxShadow: '0 4px 20px rgba(118,75,162,0.25)', 
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)'
-            }}>
-              <h3 style={{fontSize: '1.2rem', marginBottom: '1.5rem', fontWeight: 600}}>Quick Links</h3>
-              <ul style={{listStyle: 'none', padding: 0, margin: 0, lineHeight: '2'}}>
-                <li><a href="/subjects" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Go to Subjects</a></li>
-                <li><a href="/lesson" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Continue Lesson</a></li>
-                <li><a href="/progress" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>View Progress</a></li>
-                <li><a href="/ai-tutor" style={{color: '#fff', textDecoration: 'none', opacity: 0.9, transition: 'opacity 0.2s'}}>Ask AI Tutor</a></li>
-              </ul>
-            </div>
-            <div style={{
-              flex: 2, 
-              minWidth: 300, 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-              color: 'white', 
-              borderRadius: 16, 
-              boxShadow: '0 4px 20px rgba(118,75,162,0.25)', 
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)'
-            }}>
-              <h3 style={{fontSize: '1.2rem', marginBottom: '1.5rem', fontWeight: 600}}>Motivational Quote</h3>
-              <blockquote style={{
-                fontStyle: 'italic', 
-                fontSize: '1.1rem', 
-                margin: 0,
-                padding: '1.5rem',
-                background: 'rgba(255,255,255,0.1)',
-                borderRadius: 12,
-                borderLeft: '4px solid rgba(255,255,255,0.4)'
-              }}>
-                "Success is the sum of small efforts, repeated day in and day out."
-                <footer style={{fontSize: '0.9rem', marginTop: '1rem', opacity: 0.8}}>— Robert Collier</footer>
-              </blockquote>
-            </div>
-            <div style={{
-              flex: 1, 
-              minWidth: 260, 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-              color: 'white', 
-              borderRadius: 16, 
-              boxShadow: '0 4px 20px rgba(118,75,162,0.25)', 
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)'
-            }}>
-              <h3 style={{fontSize: '1.2rem', marginBottom: '1.5rem', fontWeight: 600}}>Recent Activity</h3>
-              <ul style={{paddingLeft: 0, margin: 0, lineHeight: '1.8', listStyle: 'none'}}>
-                <li style={{marginBottom: '0.8rem', paddingLeft: '1.5rem', position: 'relative'}}>
-                  <span style={{position: 'absolute', left: 0, opacity: 0.7}}>•</span>
-                  Completed: Calculus - Derivatives
-                </li>
-                <li style={{marginBottom: '0.8rem', paddingLeft: '1.5rem', position: 'relative'}}>
-                  <span style={{position: 'absolute', left: 0, opacity: 0.7}}>•</span>
-                  Quiz: JavaScript - 7/10
-                </li>
-                <li style={{marginBottom: '0.8rem', paddingLeft: '1.5rem', position: 'relative'}}>
-                  <span style={{position: 'absolute', left: 0, opacity: 0.7}}>•</span>
-                  Lesson: Python - Data Structures
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        </main>
       </div>
     </>
   );
