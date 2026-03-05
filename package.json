@@ -7,9 +7,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "latest",
+    "next": "^15.5.1",
     "node-fetch": "^2.6.7",
-    "react": "latest",
-    "react-dom": "latest"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }
