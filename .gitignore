@@ -38,6 +38,34 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+# Python
+ai-model/.venv/
+ai-model/__pycache__/
+ai-model/*.pyc
+ai-model/.env
+ai-model/.env.*
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# Env files
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
 
 # IDE
 .vscode/

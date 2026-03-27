@@ -7,9 +7,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@langchain/groq": "^1.1.5",
+    "@pinecone-database/pinecone": "^7.1.0",
+    "langchain": "^1.2.37",
     "next": "^15.5.1",
     "node-fetch": "^2.6.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   }
 }

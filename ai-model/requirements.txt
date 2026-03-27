@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+python-dotenv
+
+langchain
+langchain-community
+langchain-groq
+langchain-pinecone
+
+pinecone
+
+sentence-transformers
+transformers
+torch
+
+pydantic
+tqdm
